@@ -32,7 +32,16 @@
 
 # Ignore key files for decrypting credentials and more.
 /config/*.key
+/config/credentials/*.key
+/.kamal/secrets
+/.envrc
+*.pem
+*.p12
+*.pfx
+id_rsa
 
 
 /app/assets/builds/*
 !/app/assets/builds/.keep
+AGENTS.md
+/.ruby-lsp/

@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+
+ENV["RAILS_ENV"] ||= "test"
+ENV["RACK_ENV"] ||= ENV["RAILS_ENV"]
+
+require_relative "../config/boot"
+
+begin
+  load Gem.bin_path("rspec-core", "rspec")
+rescue Gem::Exception => e
+  warn e.message
+  warn "Add `gem \"rspec-rails\"` to your Gemfile and run `bundle install`."
+  exit 1
+end
