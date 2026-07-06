@@ -9,7 +9,7 @@ gem 'city-state', '1.1.0'
 gem 'devise', '5.0.2'
 gem 'faraday', '2.14.1'
 gem 'geocoder', '1.8.6'
-gem 'image_processing', '1.14.0'
+gem 'image_processing', '2.0.2'
 gem 'importmap-rails', '2.2.3'
 gem 'jbuilder', '2.14.1'
 gem 'kamal', '2.10.1', require: false
