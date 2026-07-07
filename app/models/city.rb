@@ -36,4 +36,6 @@ class City < ApplicationRecord
   has_many :listings, through: :neighborhoods
   has_many :relocation_plans, dependent: :destroy
   has_many :users, dependent: :nullify
+
+  delegate :name, to: :state, prefix: true
 end

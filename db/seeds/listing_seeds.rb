@@ -8,10 +8,9 @@ neighborhoods = Neighborhood.all
 property_types = [0, 1, 2, 3]
 statuses = [0, 1]
 offer_types = [0, 1]
-amenity_options = ['Pool', 'Gym', 'Parking', 'Washer/Dryer', 'Balcony', 'Dishwasher', 'AC']
+all_amenities = Amenity.all.to_a
 
 listings = []
-address_array = ['Main St', 'Oak Ave', 'Pine Ln', 'Maple Dr']
 bathrooms_count = [1.0, 1.5, 2.0, 2.5]
 
 house_images = [
@@ -90,29 +89,34 @@ neighborhoods.each do |neighborhood|
                       end
 
     listings << {
-      neighborhood_id: neighborhood.id,
-      url: "https://relo-fake-listing.com/#{neighborhood.id}-#{i}-#{SecureRandom.hex(4)}",
-      title: "Beautiful #{prop_type < 2 ? 'Home' : 'Apartment'} in #{neighborhood.name}",
-      address: location[:address],
-      rent_price: is_rental ? (rand(1500..6000) * 1.0).round(2) : nil,
-      buy_price: is_rental ? nil : (rand(300_000..1_500_000) * 1.0).round(2),
-      bedrooms: rand(1..4),
-      bathrooms: bathrooms_count.sample,
-      sqft: rand(500..2500),
-      property_type: prop_type,
-      available_from: Time.zone.now + rand(1..30).days,
-      rating: rand(3..5),
-      amenities: amenity_options.sample(rand(2..5)),
-      status: statuses.sample,
-      image_urls: selected_images,
-      with_animals: [true, false].sample,
-      offer_type: offer_type
+      attrs: {
+        neighborhood_id: neighborhood.id,
+        url: "https://relo-fake-listing.com/#{neighborhood.id}-#{i}-#{SecureRandom.hex(4)}",
+        title: "Beautiful #{prop_type < 2 ? 'Home' : 'Apartment'} in #{neighborhood.name}",
+        address: location[:address],
+        rent_price: is_rental ? (rand(1500..6000) * 1.0).round(2) : nil,
+        buy_price: is_rental ? nil : (rand(300_000..1_500_000) * 1.0).round(2),
+        bedrooms: rand(1..4),
+        bathrooms: bathrooms_count.sample,
+        sqft: rand(500..2500),
+        property_type: prop_type,
+        available_from: Time.zone.now + rand(1..30).days,
+        rating: rand(3..5),
+        status: statuses.sample,
+        image_urls: selected_images,
+        with_animals: [true, false].sample,
+        offer_type: offer_type
+      },
+      amenities: all_amenities.sample(rand(5..15))
     }
   end
 end
 
-listings.each_with_index do |attrs, index|
+listings.each_with_index do |data, index|
   warn "\rProcessing listing #{index + 1}/#{listings.size}..."
-  Listing.create!(attrs)
+  listing = Listing.create!(data[:attrs])
+  listing.amenities = data[:amenities]
+
+  # use sleep to prevent rate limit ban from geocoder
   sleep 1.5
 end

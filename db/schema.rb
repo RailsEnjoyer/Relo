@@ -10,9 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_01_214921) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_06_205119) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "amenities", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "title"
+    t.datetime "updated_at", null: false
+  end
 
   create_table "cities", force: :cascade do |t|
     t.decimal "average_buy_price", precision: 10, scale: 2, default: "0.0", null: false
@@ -33,9 +39,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_01_214921) do
     t.index ["state_id"], name: "index_cities_on_state_id"
   end
 
+  create_table "listing_amenities", force: :cascade do |t|
+    t.bigint "amenity_id", null: false
+    t.datetime "created_at", null: false
+    t.text "description"
+    t.bigint "listing_id", null: false
+    t.float "quantity", default: 0.0
+    t.datetime "updated_at", null: false
+    t.index ["amenity_id"], name: "index_listing_amenities_on_amenity_id"
+    t.index ["listing_id", "amenity_id"], name: "index_listing_amenities_on_listing_id_and_amenity_id", unique: true
+    t.index ["listing_id"], name: "index_listing_amenities_on_listing_id"
+  end
+
   create_table "listings", force: :cascade do |t|
     t.string "address"
-    t.string "amenities", default: [], array: true
     t.date "available_from"
     t.decimal "bathrooms", precision: 3, scale: 1
     t.integer "bedrooms"
@@ -182,6 +199,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_01_214921) do
   end
 
   add_foreign_key "cities", "states"
+  add_foreign_key "listing_amenities", "amenities"
+  add_foreign_key "listing_amenities", "listings"
   add_foreign_key "listings", "neighborhoods"
   add_foreign_key "neighborhoods", "cities"
   add_foreign_key "relocation_plans", "cities"
