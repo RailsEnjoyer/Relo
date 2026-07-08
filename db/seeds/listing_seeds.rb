@@ -10,7 +10,6 @@ statuses = [0, 1]
 amenity_options = ['Pool', 'Gym', 'Parking', 'Washer/Dryer', 'Balcony', 'Dishwasher', 'AC']
 
 listings = []
-address_array = ['Main St', 'Oak Ave', 'Pine Ln', 'Maple Dr']
 bathrooms_count = [1.0, 1.5, 2.0, 2.5]
 
 house_images = [
