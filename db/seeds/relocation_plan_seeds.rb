@@ -7,6 +7,9 @@ default_user = User.find_or_create_by!(email_address: 'r3ka1to@gmail.com') do |u
   u.password = 'Password#123'
 end
 
+amenity_id = Amenity.pluck(:title, :id).to_h
+resolve = ->(*titles) { titles.map { |t| amenity_id.fetch(t) } }
+
 ca = State.find_by!(code: 'CA')
 tx = State.find_by!(code: 'TX')
 ny = State.find_by!(code: 'NY')
@@ -65,8 +68,8 @@ plans = [
     buy_budget: 0,
     people_count: 1,
     with_animals: false,
-    must_haves: ['Fast internet', 'Close to transit'],
-    deal_breakers: ['No AC', 'Carpet'],
+    must_haves: resolve.('High-Speed Internet', 'Near Public Transit', 'Air Conditioning'),
+    deal_breakers: resolve.('Carpet'),
     priorities: %w[Location Budget]
   },
   {
@@ -80,8 +83,8 @@ plans = [
     buy_budget: 0,
     people_count: 2,
     with_animals: true,
-    must_haves: ['Pool', 'Pet friendly'],
-    deal_breakers: ['No parking'],
+    must_haves: resolve.('Pool', 'Pet Friendly', 'Parking'),
+    deal_breakers: [],
     priorities: %w[Amenities Safety]
   },
   {
@@ -95,8 +98,8 @@ plans = [
     buy_budget: 450_000.00,
     people_count: 2,
     with_animals: true,
-    must_haves: %w[Gym Balcony],
-    deal_breakers: ['Long commute'],
+    must_haves: resolve.('Gym', 'Balcony', 'Near Public Transit'),
+    deal_breakers: [],
     priorities: ['Commute time', 'Space']
   },
   {
@@ -110,8 +113,8 @@ plans = [
     buy_budget: 0,
     people_count: 1,
     with_animals: false,
-    must_haves: %w[Doorman Elevator],
-    deal_breakers: ['Walk-up'],
+    must_haves: resolve.('Doorman', 'Elevator'),
+    deal_breakers: [],
     priorities: %w[Location Safety]
   },
   {
@@ -125,8 +128,8 @@ plans = [
     buy_budget: 400_000.00,
     people_count: 2,
     with_animals: true,
-    must_haves: %w[Balcony Pool],
-    deal_breakers: ['No parking'],
+    must_haves: resolve.('Balcony', 'Pool', 'Parking', 'Waterfront'),
+    deal_breakers: [],
     priorities: %w[Amenities Budget]
   }
 ]

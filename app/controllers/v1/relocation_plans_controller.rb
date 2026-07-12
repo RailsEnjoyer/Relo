@@ -1,6 +1,13 @@
 # frozen_string_literal: true
 
 class V1::RelocationPlansController < ApplicationController
+  def index
+    plans = current_user.relocation_plans.includes(:city)
+
+    relocation_plans = RelocationPlansSerializer.render_as_hash(plans, view: :index)
+    success_response(extra: { relocation_plans: })
+  end
+
   def show
     plan = current_user.relocation_plans.includes(:city).find(params[:id])
 

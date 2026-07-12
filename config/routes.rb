@@ -20,7 +20,7 @@ Rails.application.routes.draw do
 
     # Core Features
     get 'dashboard', to: 'dashboards#index'
-    resources :relocation_plans, only: %i[show create]
+    resources :relocation_plans, only: %i[index show create]
 
     # Listings
     resources :listings, only: %i[index]
@@ -29,5 +29,6 @@ Rails.application.routes.draw do
     # Data
     resources :states, only: %i[index]
     resources :cities, only: %i[index]
+    resources :amenities, only: %i[index]
   end
 end
