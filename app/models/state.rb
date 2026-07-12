@@ -31,4 +31,6 @@ class State < ApplicationRecord
   has_many :neighborhoods, through: :cities
   has_many :listings, through: :neighborhoods
   has_many :users, dependent: :nullify
+
+  delegate :name, to: :city, prefix: true
 end
