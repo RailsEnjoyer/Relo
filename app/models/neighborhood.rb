@@ -31,4 +31,7 @@ class Neighborhood < ApplicationRecord
   belongs_to :city
 
   has_many :listings, dependent: :destroy
+
+  delegate :name, to: :city, prefix: true
+  delegate :state_name, to: :city
 end

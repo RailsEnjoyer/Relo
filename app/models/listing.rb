@@ -6,7 +6,6 @@
 #
 #  id               :bigint           not null, primary key
 #  address          :string
-#  amenities        :string           default([]), is an Array
 #  available_from   :date
 #  bathrooms        :decimal(3, 1)
 #  bedrooms         :integer
@@ -16,7 +15,7 @@
 #  last_synced_at   :datetime
 #  latitude         :float
 #  longitude        :float
-#  offer_type       :integer          default(0), not null
+#  offer_type       :integer          default("rent"), not null
 #  property_type    :integer          default(0), not null
 #  rating           :integer
 #  raw_payload      :jsonb
@@ -49,6 +48,11 @@ class Listing < ApplicationRecord
   belongs_to :neighborhood
   has_many :saved_listings, dependent: :destroy
   has_many :favorited_by, through: :saved_listings, source: :user
+  has_many :listing_amenities, dependent: :destroy
+  has_many :amenities, through: :listing_amenities
+
+  delegate :city_name, :state_name, to: :neighborhood
+  delegate :name, to: :neighborhood, prefix: true
 
   enum :status, { available: 0, pending: 1, rented: 2, deprecated: 3 }
   enum :offer_type, { rent: 0, purchase: 1 }
