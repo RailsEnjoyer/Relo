@@ -8,13 +8,13 @@
 #  bathrooms           :integer
 #  bedrooms            :integer
 #  buy_budget          :decimal(10, 2)
-#  deal_breakers       :string           default([]), is an Array
+#  deal_breakers       :integer          default([]), not null, is an Array
 #  description         :text
 #  latitude            :float
 #  longitude           :float
 #  monthly_rent_budget :decimal(10, 2)
 #  move_date           :datetime
-#  must_haves          :string           default([]), is an Array
+#  must_haves          :integer          default([]), not null, is an Array
 #  people_count        :integer          default(1), not null
 #  priorities          :string           default([]), is an Array
 #  property_type       :string

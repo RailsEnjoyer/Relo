@@ -9,6 +9,10 @@ class RelocationPlansSerializer < Blueprinter::Base
     e&.city&.name
   end
 
+  view :index do
+    fields :monthly_rent_budget, :buy_budget, :must_haves, :deal_breakers, :bedrooms, :bathrooms
+  end
+
   view :show do
     fields :monthly_rent_budget, :move_date
 

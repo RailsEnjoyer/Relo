@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_01_214921) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_12_070059) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -86,13 +86,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_01_214921) do
     t.decimal "buy_budget", precision: 10, scale: 2
     t.bigint "city_id"
     t.datetime "created_at", null: false
-    t.string "deal_breakers", default: [], array: true
+    t.integer "deal_breakers", default: [], null: false, array: true
     t.text "description"
     t.float "latitude"
     t.float "longitude"
     t.decimal "monthly_rent_budget", precision: 10, scale: 2
     t.datetime "move_date"
-    t.string "must_haves", default: [], array: true
+    t.integer "must_haves", default: [], null: false, array: true
     t.bigint "neighborhood_id"
     t.integer "people_count", default: 1, null: false
     t.string "priorities", default: [], array: true

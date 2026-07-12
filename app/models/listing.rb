@@ -41,6 +41,11 @@
 #  fk_rails_...  (neighborhood_id => neighborhoods.id)
 #
 class Listing < ApplicationRecord
+  include Filterable
+  include Sortable
+
+  RANGE_FILTER_COLUMNS = %i[rent_price buy_price bedrooms bathrooms].freeze
+
   belongs_to :neighborhood
   has_many :saved_listings, dependent: :destroy
   has_many :favorited_by, through: :saved_listings, source: :user
@@ -50,4 +55,42 @@ class Listing < ApplicationRecord
 
   geocoded_by :address
   after_validation :geocode, if: :address_changed?
+
+  scope :filter_by_title, ->(title) { where('title ILIKE ?', "%#{title}%") }
+  scope :filter_by_status, ->(status) { where(status:) }
+  scope :filter_by_offer_type, ->(offer_type) { where(offer_type:) }
+  scope :filter_by_state, ->(name) { joins(neighborhood: { city: :state }).where(states: { name: }) }
+  scope :filter_by_city, ->(name) { joins(neighborhood: :city).where(cities: { name: }) }
+  scope :filter_by_neighborhood, ->(name) { joins(:neighborhood).where(neighborhoods: { name: }) }
+  scope :filter_by_amenities, lambda { |ids|
+    matching_ids = joins(:amenities)
+                   .where(amenities: { id: ids })
+                   .group('listings.id')
+                   .having('COUNT(DISTINCT amenities.id) = ?', ids.size)
+                   .select('listings.id')
+
+    where(id: matching_ids)
+  }
+  scope :filter_by_deal_breakers, lambda { |titles|
+    where.not(id: joins(:amenities).where(amenities: { title: titles }).select(:id))
+  }
+
+  RANGE_FILTER_COLUMNS.each do |column|
+    scope :"filter_by_min_#{column}", ->(v) { where(column => v..) }
+    scope :"filter_by_max_#{column}", ->(v) { where(column => ..v) }
+  end
+
+  scope :sort_by_rent_price_asc, -> { order(rent_price: :asc) }
+  scope :sort_by_rent_price_desc, -> { order(rent_price: :desc) }
+  scope :sort_by_buy_price_asc, -> { order(buy_price: :asc) }
+  scope :sort_by_buy_price_desc, -> { order(buy_price: :desc) }
+
+  def self.allowed_filters
+    %i[title status offer_type state city neighborhood amenities deal_breakers] +
+      RANGE_FILTER_COLUMNS.flat_map { [:"min_#{_1}", :"max_#{_1}"] }
+  end
+
+  def self.allowed_sorts
+    %i[rent_price_asc rent_price_desc buy_price_asc buy_price_desc]
+  end
 end
