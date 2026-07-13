@@ -42,7 +42,7 @@ group :development, :test do
   gem 'rspec-rails', '8.0.3'
   gem 'rubocop', '1.85.1', require: false
   gem 'rubocop-performance', '1.26.1', require: false
-  gem 'rubocop-rails', '2.34.3', require: false
+  gem 'rubocop-rails', '2.36.0', require: false
   gem 'rubocop-rspec', '3.9.0', require: false
 end
 
