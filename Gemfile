@@ -13,7 +13,7 @@ gem 'image_processing', '1.14.0'
 gem 'importmap-rails', '2.2.3'
 gem 'jbuilder', '2.14.1'
 gem 'kamal', '2.10.1', require: false
-gem 'pagy', '43.5.6'
+gem 'pagy', '43.6.0'
 gem 'pg', '1.6.3'
 gem 'pg_search', '2.3.7'
 gem 'propshaft', '1.3.1'
