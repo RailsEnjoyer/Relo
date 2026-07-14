@@ -3,7 +3,7 @@ name: CI
 on:
   pull_request:
   push:
-    branches: [ production, uat, stage ]
+    branches: [ prod, uat, stage ]
   workflow_dispatch:
 
 concurrency:
@@ -14,11 +14,9 @@ env:
   RUBOCOP_CACHE_ROOT: tmp/rubocop
 
 jobs:
-  quality:
-    name: Quality (RuboCop + Zeitwerk)
+  rubocop:
+    name: RuboCop
     runs-on: ubuntu-latest
-    needs: rspec
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -41,34 +39,9 @@ jobs:
       - name: Lint Ruby code
         run: bin/rubocop -f github
 
-      - name: Validate Zeitwerk autoloading
-        run: bin/rails zeitwerk:check
-
-  security:
-    name: Security (Brakeman + Bundler Audit + Importmap)
-    runs-on: ubuntu-latest
-    needs: quality
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v6
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          bundler-cache: true
-
-      - name: Scan for common Rails security vulnerabilities
-        run: bin/brakeman --no-pager --exit-on-warn --exit-on-error
-
-      - name: Scan for vulnerable gems
-        run: bin/bundler-audit check --update
-
-      - name: Scan importmap dependencies
-        run: bin/importmap audit
-
   rspec:
-    name: Test (RSpec)
+    name: RSpec Tests
+    needs: importmap_audit
     runs-on: ubuntu-latest
     env:
       RAILS_ENV: test
@@ -127,3 +100,67 @@ jobs:
           name: screenshots
           path: ${{ github.workspace }}/tmp/screenshots
           if-no-files-found: ignore
+
+  brakeman:
+    name: Brakeman Security
+    needs: zeitwerk
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Scan for Rails vulnerabilities
+        run: bin/brakeman --no-pager --exit-on-warn --exit-on-error
+
+  bundler_audit:
+    name: Bundler Audit
+    needs: brakeman
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Scan for vulnerable gems
+        run: bin/bundler-audit check --update
+
+  importmap_audit:
+    name: Importmap Audit
+    needs: bundler_audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Scan importmap dependencies
+        run: bin/importmap audit
+
+  zeitwerk:
+    name: Zeitwerk Check
+    needs: rubocop
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Validate Zeitwerk autoloading
+        run: bin/rails zeitwerk:check      
