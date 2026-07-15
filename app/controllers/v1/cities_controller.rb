@@ -2,8 +2,14 @@
 
 class V1::CitiesController < ApplicationController
   def index
-    cities = City.where(state_id: params[:state_id])
+    cities = City.filtered(filter_params)
 
     success_response(extra: { cities: CitiesSerializer.render_as_hash(cities, view: :index) })
+  end
+
+  private
+
+  def filter_params
+    params.permit(*City.allowed_filters).to_h
   end
 end

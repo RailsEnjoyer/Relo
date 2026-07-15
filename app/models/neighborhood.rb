@@ -28,10 +28,18 @@
 #  fk_rails_...  (city_id => cities.id)
 #
 class Neighborhood < ApplicationRecord
+  include Filterable
+
   belongs_to :city
 
   has_many :listings, dependent: :destroy
 
   delegate :name, to: :city, prefix: true
   delegate :state_name, to: :city
+
+  scope :filter_by_city_id, ->(city_id) { where(city_id:) }
+
+  def self.allowed_filters
+    %i[city_id]
+  end
 end

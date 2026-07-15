@@ -29,6 +29,7 @@ Rails.application.routes.draw do
     # Data
     resources :states, only: %i[index]
     resources :cities, only: %i[index]
+    resources :neighborhoods, only: %i[index]
     resources :amenities, only: %i[index]
   end
 end

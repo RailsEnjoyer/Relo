@@ -30,6 +30,8 @@
 #  fk_rails_...  (state_id => states.id)
 #
 class City < ApplicationRecord
+  include Filterable
+
   belongs_to :state
 
   has_many :neighborhoods, dependent: :destroy
@@ -38,4 +40,10 @@ class City < ApplicationRecord
   has_many :users, dependent: :nullify
 
   delegate :name, to: :state, prefix: true
+
+  scope :filter_by_state_id, ->(state_id) { where(state_id:) }
+
+  def self.allowed_filters
+    %i[state_id]
+  end
 end
