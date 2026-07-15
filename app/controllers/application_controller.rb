@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
 
   private
 
-  def error_reponse(errors:, status: :unprocessable_content, extra: nil)
+  def error_response(errors:, status: :unprocessable_content, extra: nil)
     render json: { status: 'error', errors:, extra: }, status:
   end
 
@@ -29,5 +29,11 @@ class ApplicationController < ActionController::Base
 
   def current_user
     Current.session&.user
+  end
+
+  def render_result(result:, success: nil, failure: nil)
+    return success_response(extra: success) if result.persisted? && result.errors.none?
+
+    error_response(errors: result.errors)
   end
 end

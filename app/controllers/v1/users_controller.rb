@@ -5,7 +5,7 @@ class V1::UsersController < ApplicationController
 
   def create
     service = Users::Create.call(user_params)
-    return error_reponse(errors: service.errors) if service.failure?
+    return error_response(errors: service.errors) if service.failure?
 
     success_response(extra: service.result)
   end
@@ -14,7 +14,7 @@ class V1::UsersController < ApplicationController
     if current_user.update(user_params)
       success_response(extra: { user: UsersSerializer.render_as_hash(current_user, view: :general) })
     else
-      error_reponse(errors: current_user.errors.full_messages)
+      error_response(errors: current_user.errors.full_messages)
     end
   end
 

@@ -5,5 +5,6 @@
 
 require_relative 'seeds/amenity_seeds'
 require_relative 'seeds/relocation_plan_seeds'
+require_relative 'seeds/move_timeline_item_seeds'
 require_relative 'seeds/neighborhood_seeds'
 require_relative 'seeds/listing_seeds'

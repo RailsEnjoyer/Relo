@@ -7,7 +7,7 @@
 ## Testing
 
 - [ ] Write specs for models and services
-- [ ] Add shared examples (reusable groups of examples for common behavior)
+- [ ] Add shared examples
 
 ## Validations
 
@@ -17,6 +17,9 @@
 ## Refactoring
 
 - [x] Move listing filters from frontend to backend
+- [ ] Move all hardcoded strings (validation messages, error responses, etc.) to locale files (`config/locales/*.yml`)
+- [ ] Replace ad-hoc success/error rendering in controllers with `ApplicationController#handle_write_action` where applicable
+- [ ] Rewrite `Listings::MatchCalculator` — refactor scoring/penalty logic, address N+1 in location matching (see chain calls in `match_neighborhood_level`), extract magic numbers, reconsider score/penalty interaction
 
 ## Security
 

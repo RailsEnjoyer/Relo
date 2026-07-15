@@ -17,7 +17,7 @@ class V1::RelocationPlansController < ApplicationController
 
   def create
     service = RelocationPlans::Create.call(params: relocation_plan_params, user: current_user)
-    return error_reponse(errors: service.errors) if service.failure?
+    return error_response(errors: service.errors) if service.failure?
 
     success_response(extra: service.result)
   end

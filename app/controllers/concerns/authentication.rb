@@ -33,7 +33,7 @@ module Authentication
   end
 
   def request_authentication
-    error_reponse(errors: 'Unauthorized', status: :unauthorized)
+    error_response(errors: 'Unauthorized', status: :unauthorized)
   end
 
   def after_authentication_url
