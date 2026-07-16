@@ -6,4 +6,8 @@ class NeighborhoodsSerializer < Blueprinter::Base
   view :guest_index do
     fields :name, :cost_of_living_index, :crime_index, :walkability_score, :school_rating
   end
+
+  view :index do
+    fields :name
+  end
 end

@@ -3,6 +3,7 @@
 ## Pre-MVP
 
 - [ ] Add listing filters for all `RelocationPlan` fields on the listings page
+- [ ] Add setup/onboarding docs (README section or `SETUP.md`): how to run the app locally, including the mandatory one-time `location_seeds.rb` run before `db:seed` (states/cities dataset that `relocation_plan_seeds.rb` depends on)
 
 ## Testing
 

@@ -63,9 +63,9 @@ class Listing < ApplicationRecord
   scope :filter_by_title, ->(title) { where('title ILIKE ?', "%#{title}%") }
   scope :filter_by_status, ->(status) { where(status:) }
   scope :filter_by_offer_type, ->(offer_type) { where(offer_type:) }
-  scope :filter_by_state, ->(name) { joins(neighborhood: { city: :state }).where(states: { name: }) }
-  scope :filter_by_city, ->(name) { joins(neighborhood: :city).where(cities: { name: }) }
-  scope :filter_by_neighborhood, ->(name) { joins(:neighborhood).where(neighborhoods: { name: }) }
+  scope :filter_by_state_id, ->(state_id) { joins(neighborhood: { city: :state }).where(states: { id: state_id }) }
+  scope :filter_by_city_id, ->(city_id) { joins(neighborhood: :city).where(cities: { id: city_id }) }
+  scope :filter_by_neighborhood_id, ->(neighborhood_id) { where(neighborhood_id:) }
   scope :filter_by_amenities, lambda { |ids|
     matching_ids = joins(:amenities)
                    .where(amenities: { id: ids })
@@ -90,7 +90,7 @@ class Listing < ApplicationRecord
   scope :sort_by_buy_price_desc, -> { order(buy_price: :desc) }
 
   def self.allowed_filters
-    %i[title status offer_type state city neighborhood amenities deal_breakers] +
+    %i[title status offer_type state_id city_id neighborhood_id amenities deal_breakers] +
       RANGE_FILTER_COLUMNS.flat_map { [:"min_#{_1}", :"max_#{_1}"] }
   end
 
