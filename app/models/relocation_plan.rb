@@ -53,6 +53,8 @@ class RelocationPlan < ApplicationRecord
 
   validates :monthly_rent_budget, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
   validates :buy_budget, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
+  validates :title, presence: true, length: { in: 4..16 }
+  validates :description, length: { maximum: 1000 }
 
   def full_address
     [neighborhood&.name, city&.name, state&.name].compact.join(', ')
