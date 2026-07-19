@@ -44,11 +44,11 @@
 #  fk_rails_...  (user_id => users.id)
 #
 class RelocationPlan < ApplicationRecord
-  # optional should be romoved
+  has_many :move_timeline_items, -> { order(:position) }, inverse_of: :relocation_plan, dependent: :destroy
 
-  belongs_to :neighborhood, optional: true
-  belongs_to :state, optional: true
-  belongs_to :city, optional: true
+  belongs_to :neighborhood
+  belongs_to :state
+  belongs_to :city
   belongs_to :user
 
   validates :monthly_rent_budget, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true

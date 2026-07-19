@@ -10,7 +10,7 @@ class V1::SessionsController < ApplicationController
       user = UsersSerializer.render_as_hash(current_user, view: :general)
       success_response(extra: { user: })
     else
-      error_reponse(errors: 'Invalid email or password', status: :unauthorized)
+      error_response(errors: 'Invalid email or password', status: :unauthorized)
     end
   end
 

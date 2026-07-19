@@ -20,7 +20,10 @@ Rails.application.routes.draw do
 
     # Core Features
     get 'dashboard', to: 'dashboards#index'
-    resources :relocation_plans, only: %i[index show create]
+
+    resources :relocation_plans, only: %i[show create index] do
+      resources :move_timeline_items, only: %i[index create update destroy]
+    end
 
     # Listings
     resources :listings, only: %i[index]
