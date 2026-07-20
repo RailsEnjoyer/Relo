@@ -29,7 +29,7 @@ gem 'solid_queue', '1.3.2'
 gem 'stimulus-rails', '1.3.4'
 gem 'stripe', '18.4.1'
 gem 'tailwindcss-rails', '4.4.0'
-gem 'thruster', '0.1.19', require: false
+gem 'thruster', '0.1.23', require: false
 gem 'turbo-rails', '2.0.23'
 gem 'tzinfo-data', platforms: %i[windows jruby]
 
