@@ -47,7 +47,7 @@ group :development, :test do
 end
 
 group :development do
-  gem 'annotaterb', '4.22.0'
+  gem 'annotaterb', '4.24.0'
   gem 'bullet', '8.1.0'
   gem 'letter_opener_web', '3.0.0'
   gem 'web-console', '4.3.0'
